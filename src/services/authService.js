@@ -15,11 +15,17 @@ export const authService = {
       const response = await api.post('/auth/login', credentials);
       const { user, token } = response.data;
       
+      if (!user || !token) {
+        throw new Error('Invalid login response from server');
+      }
+
       localStorage.setItem('authToken', token);
       localStorage.setItem('user', JSON.stringify(user));
       
-      return response.data;
+      return user;
     } catch (error) {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
       throw new Error(error.response?.data?.message || 'Login failed');
     }
   },

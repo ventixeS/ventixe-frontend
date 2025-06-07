@@ -54,10 +54,10 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (credentials) => {
-    const response = await authService.login(credentials);
-    setUser(response.user);
+    const loggedInUser = await authService.login(credentials);
+    setUser(loggedInUser);
     setIsAuthenticated(true);
-    return response;
+    return loggedInUser;
   };
 
   const register = async (userData) => {
