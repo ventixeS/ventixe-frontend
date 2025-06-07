@@ -18,35 +18,37 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const initializeAuth = async () => {
+      console.log('AuthContext: Initializing authentication...');
       try {
         const storedUser = authService.getStoredUser();
         const token = authService.getStoredToken();
+        console.log('AuthContext: Stored token:', token);
+        console.log('AuthContext: Stored user:', storedUser);
         
         if (token && storedUser) {
+          console.log('AuthContext: Token and user found in storage. Setting auth state.');
+          setUser(storedUser);
+          setIsAuthenticated(true);
+          
           try {
-            setUser(storedUser);
-            setIsAuthenticated(true);
-            
-            try {
-              const currentUser = await authService.getCurrentUser();
-              setUser(currentUser);
-            } catch (refreshError) {
-              console.warn('Failed to refresh user data, using stored user:', refreshError);
-            }
-          } catch (error) {
-            console.error('Auth initialization error:', error);
-            authService.logout();
-            setUser(null);
-            setIsAuthenticated(false);
+            console.log('AuthContext: Refreshing user data from server...');
+            const currentUser = await authService.getCurrentUser();
+            console.log('AuthContext: Refreshed user data:', currentUser);
+            setUser(currentUser);
+          } catch (refreshError) {
+            console.warn('AuthContext: Failed to refresh user data, continuing with stored user.', refreshError);
           }
+        } else {
+          console.log('AuthContext: No token or user in storage.');
         }
       } catch (initError) {
-        console.error('Auth initialization error:', initError);
+        console.error('AuthContext: Critical error during auth initialization.', initError);
         authService.logout();
         setUser(null);
         setIsAuthenticated(false);
       } finally {
         setLoading(false);
+        console.log('AuthContext: Initialization complete.');
       }
     };
 
@@ -54,10 +56,17 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (credentials) => {
-    const loggedInUser = await authService.login(credentials);
-    setUser(loggedInUser);
-    setIsAuthenticated(true);
-    return loggedInUser;
+    console.log('AuthContext: Attempting to log in...');
+    try {
+      const loggedInUser = await authService.login(credentials);
+      console.log('AuthContext: Login successful. User data:', loggedInUser);
+      setUser(loggedInUser);
+      setIsAuthenticated(true);
+      return loggedInUser;
+    } catch (error) {
+      console.error('AuthContext: Login failed.', error);
+      throw error;
+    }
   };
 
   const register = async (userData) => {
