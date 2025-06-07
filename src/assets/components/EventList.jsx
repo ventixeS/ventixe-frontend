@@ -4,8 +4,7 @@ import EventItem from './EventItem';
 import searchIcon from '../images/search-icon.svg';
 import chevronDownIcon from '../images/chevron-down-icon.svg';
 import calendarIcon from '../images/calendar-icon.svg';
-
-const API_URL = "https://ventixeeventservices-cah0ebd7hagub9bu.swedencentral-01.azurewebsites.net";
+import { eventService } from '../../services/eventService';
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
@@ -25,27 +24,18 @@ const EventList = () => {
       setLoading(true);
       setError(null);
       
-      console.log(`Fetching events from: ${API_URL}/api/events`);
-      const res = await fetch(`${API_URL}/api/events`);
+      const data = await eventService.getAllEvents();
+      console.log("API response:", data);
       
-      if (res.ok) {
-        const data = await res.json();
-        console.log("API response:", data);
-        
-        if (data && data.result && Array.isArray(data.result)) {
-          setEvents(data.result);
-          console.log("Events set to:", data.result);
-        } else if (Array.isArray(data)) {
-          setEvents(data);
-          console.log("Events set to array directly:", data);
-        } else {
-          console.error("Unexpected response format:", data);
-          setError("Unexpected API response format");
-          setEvents([]);
-        }
+      if (data && data.result && Array.isArray(data.result)) {
+        setEvents(data.result);
+        console.log("Events set to:", data.result);
+      } else if (Array.isArray(data)) {
+        setEvents(data);
+        console.log("Events set to array directly:", data);
       } else {
-        console.error(`API Error: ${res.status} ${res.statusText}`);
-        setError(`Error fetching events: ${res.status} ${res.statusText}`);
+        console.error("Unexpected response format:", data);
+        setError("Unexpected API response format");
         setEvents([]);
       }
     } catch (err) {
@@ -124,7 +114,7 @@ const EventList = () => {
       <section className="events-container error-container">
         <div className="error">{error}</div>
         <div className="error-details">
-          <p>The API endpoint at <code>{API_URL}/api/events</code> is not responding correctly.</p>
+          <p>The events service is not responding correctly.</p>
           <p>Please verify that:</p>
           <ul>
             <li>Your backend service is properly deployed</li>

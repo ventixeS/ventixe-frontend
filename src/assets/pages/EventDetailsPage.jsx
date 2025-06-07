@@ -4,6 +4,7 @@ import './EventDetailsPage.css'
 import Header from '../components/Header'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
+import { eventService } from '../../services/eventService'
 import placeholderImg from '../images/seat-plan.svg'
 import Partner1 from '../images/Partner-1.svg'
 import Partner2 from '../images/Partner-2.svg'
@@ -37,10 +38,8 @@ const EventDetailsPage = () => {
       setLoading(true)
       setError(null)
       try {
-        const res = await fetch(`https://ventixeeventservices-cah0ebd7hagub9bu.swedencentral-01.azurewebsites.net/api/events/${id}`)
-        if (!res.ok) throw new Error('Failed to fetch event')
-        const data = await res.json()
-        setEvent(data.result)
+        const data = await eventService.getEventById(id)
+        setEvent(data.result || data)
       } catch {
         setError('Could not load event details.')
       } finally {
