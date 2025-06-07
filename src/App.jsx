@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
-import ProtectedRoute from './components/ProtectedRoute'
+import ProtectedRoute from './assets/components/ProtectedRoute'
 import './App.css'
 
 // Pages
