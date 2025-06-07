@@ -76,7 +76,8 @@ const BookingEventPage = () => {
                 userId: user?.id || null,
                 bookingDate: new Date().toISOString(),
                 status: 'confirmed',
-                totalAmount: packagePrice
+                totalAmount: packagePrice,
+                ticketQuantity: 1,
             };
 
             const result = await bookingService.createBooking(bookingData);
