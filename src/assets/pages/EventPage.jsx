@@ -147,17 +147,14 @@ const EventPage = () => {
       <div className="content-area">
         <Header />
         <main className="events-main">
-          {/* Breadcrumb */}
           <div className="breadcrumb">
             <Link to="/dashboard" className="breadcrumb-link">Dashboard</Link>
             <span className="breadcrumb-separator">/</span>
             <span className="breadcrumb-current">Events</span>
           </div>
 
-          {/* Page Title */}
           <h1 className="page-title">Events</h1>
 
-          {/* Tab Navigation */}
           <div className="tab-navigation">
             {tabs.map(tab => (
               <button
@@ -170,7 +167,6 @@ const EventPage = () => {
             ))}
           </div>
 
-          {/* Search and Filters */}
           <div className="events-toolbar">
             <div className="search-container">
               <div className="search-input-wrapper">
@@ -249,7 +245,6 @@ const EventPage = () => {
             </div>
           </div>
 
-          {/* Events Grid */}
           <div className="events-grid">
             {paginatedEvents.map(event => (
               <div key={event.id} className="event-card">
@@ -290,7 +285,6 @@ const EventPage = () => {
             ))}
           </div>
 
-          {/* Pagination */}
           <div className="pagination-container">
             <div className="pagination-info">
               Showing <span className="pagination-select">{eventsPerPage}</span> out of {filteredEvents.length}

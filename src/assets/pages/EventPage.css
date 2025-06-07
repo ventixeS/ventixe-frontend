@@ -1,5 +1,3 @@
-/* EventPage Styles - Matching Reference Design */
-
 .events-main {
   padding: 2rem;
   max-width: 1200px;
@@ -7,7 +5,6 @@
   background: var(--bg-primary);
 }
 
-/* Breadcrumb */
 .breadcrumb {
   display: flex;
   align-items: center;
@@ -36,7 +33,6 @@
   font-weight: 500;
 }
 
-/* Page Title */
 .page-title {
   font-size: 2rem;
   font-weight: 700;
@@ -45,7 +41,6 @@
   margin-top: 0;
 }
 
-/* Tab Navigation */
 .tab-navigation {
   display: flex;
   gap: 1rem;
@@ -76,7 +71,6 @@
   color: var(--text-primary);
 }
 
-/* Events Toolbar */
 .events-toolbar {
   display: flex;
   justify-content: space-between;
@@ -125,7 +119,6 @@
   color: var(--text-tertiary);
 }
 
-/* Filters */
 .filters-container {
   display: flex;
   gap: 1rem;
@@ -194,7 +187,6 @@
   background: var(--cool-grey-20);
 }
 
-/* Events Grid */
 .events-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -316,7 +308,6 @@
   color: var(--primary-100);
 }
 
-/* Pagination */
 .pagination-container {
   display: flex;
   justify-content: space-between;
@@ -391,7 +382,6 @@
   color: var(--text-secondary);
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
   .events-main {
     padding: 1.5rem;
