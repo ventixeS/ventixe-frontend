@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// Base URLs for different services
 const SERVICE_URLS = {
   user: 'https://ventixeuserservice-c3dxc0hvbgb3fdbp.swedencentral-01.azurewebsites.net/api',
   event: 'https://ventixeeventservices-cah0ebd7hagub9bu.swedencentral-01.azurewebsites.net/api',
