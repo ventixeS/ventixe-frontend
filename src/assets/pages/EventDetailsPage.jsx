@@ -68,14 +68,7 @@ const EventDetailsPage = () => {
     });
   }
 
-  const getCategoryName = (id) => {
-    const categories = ['Music', 'Food & Culinary', 'Outdoor & Adventure', 'Art & Design', 'Fashion', 'Technology'];
-    return categories[id % categories.length];
-  };
-  const getCategoryClass = (id) => {
-    const classes = ['music', 'food', 'outdoor', 'art', 'fashion', 'technology'];
-    return classes[id % classes.length];
-  };
+
 
   const minPrice = event.price || 60;
 
@@ -103,7 +96,6 @@ const EventDetailsPage = () => {
         <div className="event-details-left">
           <div className="event-details-card">
             <div className="event-details-image">
-              <div className={`event-category ${getCategoryClass(event.id)}`}>{getCategoryName(event.id)}</div>
               <img src={event.image || placeholderImg} alt={event.title} />
               <span className="event-status-badge active">Active</span>
             </div>

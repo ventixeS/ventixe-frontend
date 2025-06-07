@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserCircleIcon, EnvelopeIcon, CalendarIcon, CheckBadgeIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../../contexts/AuthContext';
+import Header from '../components/Header';
+import Nav from '../components/Nav';
+import Footer from '../components/Footer';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
@@ -69,20 +72,34 @@ const ProfilePage = () => {
 
   if (!user) {
     return (
-      <div className="profile-container">
-        <div className="profile-card">
-          <div className="loading-state">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-600"></div>
-            <p>Loading profile...</p>
-          </div>
+      <div className="portal-wrapper">
+        <Nav />
+        <div className="content-area">
+          <Header />
+          <main>
+            <div className="profile-container">
+              <div className="profile-card">
+                <div className="loading-state">
+                  <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-600"></div>
+                  <p>Loading profile...</p>
+                </div>
+              </div>
+            </div>
+          </main>
+          <Footer />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="profile-container">
-      <div className="profile-card">
+    <div className="portal-wrapper">
+      <Nav />
+      <div className="content-area">
+        <Header />
+        <main>
+          <div className="profile-container">
+            <div className="profile-card">
         <div className="profile-header">
           <div className="profile-avatar">
             <UserCircleIcon className="w-24 h-24 text-gray-400" />
@@ -186,7 +203,10 @@ const ProfilePage = () => {
           >
             Sign Out
           </button>
+          </div>
         </div>
+        </main>
+        <Footer />
       </div>
     </div>
   );

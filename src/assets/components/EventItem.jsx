@@ -13,9 +13,6 @@ const EventItem = ({ event }) => {
             </div>
             <div className="event-content">
                 <div className="event-details">
-                    <div className={`event-category ${event.category.class}`}>
-                        {event.category.name}
-                    </div>
                     <h3 className="event-title">{event.title}</h3>
                     <p className="event-description">
                         {event.description}
