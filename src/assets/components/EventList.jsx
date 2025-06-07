@@ -61,7 +61,6 @@ const EventList = () => {
     getEvents();
   }, []);
 
-  // Format API events for display
   const formatEvents = (apiEvents) => {
     return apiEvents.map(event => ({
       id: event.id,
@@ -78,7 +77,6 @@ const EventList = () => {
     }));
   };
 
-  // Helper functions for formatting event data
   const getCategoryName = (id) => {
     const categories = ['Music', 'Food & Culinary', 'Outdoor & Adventure', 'Art & Design', 'Fashion', 'Technology'];
     return categories[id % categories.length];

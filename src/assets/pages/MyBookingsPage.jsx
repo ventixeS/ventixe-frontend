@@ -10,13 +10,12 @@ const MyBookingsPage = () => {
   const { user } = useAuth()
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState('all') // all, upcoming, past, cancelled
+  const [filter, setFilter] = useState('all') 
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        // In a real application, you would fetch bookings from your BookingService
-        // For MVP, we'll simulate with dummy data
+
         const dummyBookings = [
           {
             id: 1,
@@ -122,7 +121,6 @@ const MyBookingsPage = () => {
   const handleCancelBooking = async (bookingId) => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
       try {
-        // In a real app, make API call to cancel booking
         setBookings(prev => prev.map(booking => 
           booking.id === bookingId 
             ? { ...booking, status: 'cancelled' }
@@ -162,7 +160,6 @@ const MyBookingsPage = () => {
             <p>Manage and view all your event bookings</p>
           </div>
 
-          {/* Filter Tabs */}
           <div className="filter-tabs">
             <button 
               className={filter === 'all' ? 'active' : ''}
@@ -190,7 +187,6 @@ const MyBookingsPage = () => {
             </button>
           </div>
 
-          {/* Bookings List */}
           {filteredBookings.length > 0 ? (
             <div className="bookings-list">
               {filteredBookings.map(booking => (

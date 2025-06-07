@@ -16,7 +16,6 @@ const BookingEventPage = () => {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
     
-    // Get package info from URL params
     const selectedPackage = searchParams.get('package') || 'General Admission Package';
     const packagePrice = parseFloat(searchParams.get('price')) || 50;
     
@@ -38,23 +37,20 @@ const BookingEventPage = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                // Fetch event details
                 const eventRes = await fetch(`https://ventixeeventservices-cah0ebd7hagub9bu.swedencentral-01.azurewebsites.net/api/events/${id}`);
                 if (!eventRes.ok) throw new Error("Failed to fetch event");
                 const eventData = await eventRes.json();
                 setEvent(eventData.result);
 
-                // Fetch user details (assuming user service exists)
                 try {
                     const userRes = await fetch('https://ventixe-user-service.azurewebsites.net/api/user/current', {
                         headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}` // Adjust based on your auth
+                            'Authorization': `Bearer ${localStorage.getItem('token')}` 
                         }
                     });
                     if (userRes.ok) {
                         const userData = await userRes.json();
                         setUser(userData);
-                        // Pre-fill form with user data
                         setFormData(prev => ({
                             ...prev,
                             firstName: userData.firstName || '',
@@ -97,7 +93,7 @@ const BookingEventPage = () => {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Adjust based on your auth
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify(bookingData)
             });
@@ -134,7 +130,6 @@ const BookingEventPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Basic validation
         const requiredFields = ['firstName', 'lastName', 'email', 'streetName', 'postalCode', 'city'];
         const missingFields = requiredFields.filter(field => !formData[field].trim());
         

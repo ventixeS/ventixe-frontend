@@ -40,7 +40,6 @@ const Nav = () => {
         <div className="brand-name">Ventixe</div>
       </div>
       
-      {/* User Info Section */}
       {isAuthenticated && user && (
         <div className="user-info">
           <div className="user-avatar">
@@ -109,7 +108,6 @@ const Nav = () => {
           </NavLink>
         </li>
         
-        {/* Profile link for authenticated users */}
         {isAuthenticated && (
           <li className="nav-item">
             <NavLink to="/profile" className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>

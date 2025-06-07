@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Initialize auth state on app load
   useEffect(() => {
     const initializeAuth = async () => {
       try {
@@ -24,13 +23,11 @@ export const AuthProvider = ({ children }) => {
         const token = authService.getStoredToken();
         
         if (token && storedUser) {
-          // Verify token is still valid by fetching current user
           try {
             const currentUser = await authService.getCurrentUser();
             setUser(currentUser);
             setIsAuthenticated(true);
           } catch {
-            // Token is invalid, clear stored data
             authService.logout();
             setUser(null);
             setIsAuthenticated(false);

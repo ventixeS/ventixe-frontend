@@ -11,7 +11,6 @@ const EventPage = () => {
       <div className="content-area">
         <Header />
         
-        {/* Hero Section */}
         <section className="hero-section">
           <div className="hero-content">
             <h1 className="hero-title">Welcome to Ventixe</h1>

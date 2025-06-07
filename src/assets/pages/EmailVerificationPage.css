@@ -86,7 +86,6 @@
   margin: 0;
 }
 
-/* Reuse common styles */
 .primary-button {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
@@ -238,7 +237,6 @@
   text-decoration: underline;
 }
 
-/* Responsive Design */
 @media (max-width: 640px) {
   .verification-container {
     padding: 0.5rem;

@@ -9,7 +9,7 @@ const EmailVerificationPage = () => {
   const { verifyEmail, resendVerificationEmail } = useAuth();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [verificationState, setVerificationState] = useState('idle'); // idle, verifying, success, error
+  const [verificationState, setVerificationState] = useState('idle'); 
   const [error, setError] = useState('');
   const [isResending, setIsResending] = useState(false);
   const [resendMessage, setResendMessage] = useState('');
@@ -20,7 +20,6 @@ const EmailVerificationPage = () => {
     formState: { errors }
   } = useForm();
 
-  // Check for verification token in URL
   useEffect(() => {
     const token = searchParams.get('token');
     if (token) {
@@ -126,7 +125,6 @@ const EmailVerificationPage = () => {
     );
   }
 
-  // Default state - show resend form
   return (
     <div className="verification-container">
       <div className="verification-card">

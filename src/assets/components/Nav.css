@@ -28,7 +28,6 @@
   color: var(--grey-100);
 }
 
-/* User Info Section */
 .user-info {
   display: flex;
   align-items: center;

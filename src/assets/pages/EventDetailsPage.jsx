@@ -54,7 +54,6 @@ const EventDetailsPage = () => {
   if (error) return <div className="event-details-error">{error}</div>
   if (!event) return null
 
-  // Helpers for formatting
   const formatDate = (dateString) => {
     if (!dateString) return 'TBA';
     const date = new Date(dateString);
@@ -70,7 +69,6 @@ const EventDetailsPage = () => {
     });
   }
 
-  // Category badge logic (reuse EventItem logic)
   const getCategoryName = (id) => {
     const categories = ['Music', 'Food & Culinary', 'Outdoor & Adventure', 'Art & Design', 'Fashion', 'Technology'];
     return categories[id % categories.length];
@@ -80,7 +78,6 @@ const EventDetailsPage = () => {
     return classes[id % classes.length];
   };
 
-  // Placeholder for price
   const minPrice = event.price || 60;
 
   return (

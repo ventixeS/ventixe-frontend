@@ -20,8 +20,6 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // This would normally fetch user's booking data from your BookingService
-        // For MVP, we'll simulate with dummy data
         setStats({
           totalBookings: 12,
           upcomingEvents: 3,
@@ -89,7 +87,6 @@ const DashboardPage = () => {
             <p>Here's what's happening with your events</p>
           </div>
 
-          {/* Stats Cards */}
           <div className="stats-grid">
             <div className="stat-card">
               <div className="stat-icon">🎫</div>
@@ -114,7 +111,6 @@ const DashboardPage = () => {
             </div>
           </div>
 
-          {/* Quick Actions */}
           <div className="quick-actions">
             <h2>Quick Actions</h2>
             <div className="action-buttons">
@@ -133,7 +129,6 @@ const DashboardPage = () => {
             </div>
           </div>
 
-          {/* Recent Activity */}
           <div className="dashboard-sections">
             <div className="section">
               <h2>Recent Bookings</h2>

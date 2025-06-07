@@ -1,14 +1,12 @@
 import axios from 'axios';
 
-// Create axios instance with base configuration
 const api = axios.create({
-  baseURL: 'https://ventixeuserservice-c3dxc0hvbgb3fdbp.swedencentral-01.azurewebsites.net/api', // Adjust this to match your UserService port
+  baseURL: 'https://ventixeuserservice-c3dxc0hvbgb3fdbp.swedencentral-01.azurewebsites.net/api',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
@@ -20,7 +18,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor to handle auth errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {

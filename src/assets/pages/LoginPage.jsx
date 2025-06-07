@@ -19,7 +19,6 @@ const LoginPage = () => {
     formState: { errors }
   } = useForm();
 
-  // Get the redirect path from location state
   const from = location.state?.from?.pathname || '/';
 
   const onSubmit = async (data) => {
