@@ -100,111 +100,112 @@ const ProfilePage = () => {
         <main>
           <div className="profile-container">
             <div className="profile-card">
-        <div className="profile-header">
-          <div className="profile-avatar">
-            <UserCircleIcon className="w-24 h-24 text-gray-400" />
-          </div>
-          <div className="profile-info">
-            <h1 className="profile-name">{user.name}</h1>
-            <div className="profile-email">
-              <EnvelopeIcon className="w-5 h-5" />
-              <span>{user.email}</span>
-              {verificationStatus === true && (
-                <CheckBadgeIcon className="w-5 h-5 text-green-500" title="Email verified" />
-              )}
-              {verificationStatus === false && (
-                <ExclamationTriangleIcon className="w-5 h-5 text-yellow-500" title="Email not verified" />
-              )}
-            </div>
-            <div className="profile-joined">
-              <CalendarIcon className="w-5 h-5" />
-              <span>Joined {formatDate(user.createdAt)}</span>
-            </div>
-          </div>
-        </div>
-
-        {verificationStatus === false && (
-          <div className="verification-warning">
-            <div className="warning-content">
-              <ExclamationTriangleIcon className="w-6 h-6 text-yellow-500" />
-              <div>
-                <h3>Email Not Verified</h3>
-                <p>Please verify your email address to access all features.</p>
-              </div>
-            </div>
-            {error && (
-              <div className="error-message">
-                <p>{error}</p>
-              </div>
-            )}
-            {resendMessage && (
-              <div className="success-message">
-                <p>{resendMessage}</p>
-              </div>
-            )}
-            <button
-              onClick={handleResendVerification}
-              disabled={isLoading}
-              className="verify-button"
-            >
-              {isLoading ? (
-                <div className="loading-spinner">
-                  <div className="spinner"></div>
-                  Sending...
+              <div className="profile-header">
+                <div className="profile-avatar">
+                  <UserCircleIcon className="w-24 h-24 text-gray-400" />
                 </div>
-              ) : (
-                'Resend Verification Email'
-              )}
-            </button>
-          </div>
-        )}
-
-        <div className="profile-stats">
-          <div className="stat-item">
-            <h3>Account Status</h3>
-            <p className={`status ${verificationStatus ? 'verified' : 'unverified'}`}>
-              {verificationStatus ? 'Verified' : 'Unverified'}
-            </p>
-          </div>
-          <div className="stat-item">
-            <h3>Member Since</h3>
-            <p>{formatDate(user.createdAt)}</p>
-          </div>
-          <div className="stat-item">
-            <h3>User ID</h3>
-            <p>#{user.id}</p>
-          </div>
-        </div>
-
-        <div className="profile-actions">
-          <button
-            onClick={handleRefreshProfile}
-            disabled={isLoading}
-            className="secondary-button"
-          >
-            {isLoading ? (
-              <div className="loading-spinner">
-                <div className="spinner"></div>
-                Refreshing...
+                <div className="profile-info">
+                  <h1 className="profile-name">{user.name}</h1>
+                  <div className="profile-email">
+                    <EnvelopeIcon className="w-5 h-5" />
+                    <span>{user.email}</span>
+                    {verificationStatus === true && (
+                      <CheckBadgeIcon className="w-5 h-5 text-green-500" title="Email verified" />
+                    )}
+                    {verificationStatus === false && (
+                      <ExclamationTriangleIcon className="w-5 h-5 text-yellow-500" title="Email not verified" />
+                    )}
+                  </div>
+                  <div className="profile-joined">
+                    <CalendarIcon className="w-5 h-5" />
+                    <span>Joined {formatDate(user.createdAt)}</span>
+                  </div>
+                </div>
               </div>
-            ) : (
-              'Refresh Profile'
-            )}
-          </button>
-          <button
-            onClick={() => navigate('/')}
-            className="primary-button"
-          >
-            Back to Events
-          </button>
-          <button
-            onClick={handleLogout}
-            className="logout-button"
-          >
-            Sign Out
-          </button>
+
+              {verificationStatus === false && (
+                <div className="verification-warning">
+                  <div className="warning-content">
+                    <ExclamationTriangleIcon className="w-6 h-6 text-yellow-500" />
+                    <div>
+                      <h3>Email Not Verified</h3>
+                      <p>Please verify your email address to access all features.</p>
+                    </div>
+                  </div>
+                  {error && (
+                    <div className="error-message">
+                      <p>{error}</p>
+                    </div>
+                  )}
+                  {resendMessage && (
+                    <div className="success-message">
+                      <p>{resendMessage}</p>
+                    </div>
+                  )}
+                  <button
+                    onClick={handleResendVerification}
+                    disabled={isLoading}
+                    className="verify-button"
+                  >
+                    {isLoading ? (
+                      <div className="loading-spinner">
+                        <div className="spinner"></div>
+                        Sending...
+                      </div>
+                    ) : (
+                      'Resend Verification Email'
+                    )}
+                  </button>
+                </div>
+              )}
+
+              <div className="profile-stats">
+                <div className="stat-item">
+                  <h3>Account Status</h3>
+                  <p className={`status ${verificationStatus ? 'verified' : 'unverified'}`}>
+                    {verificationStatus ? 'Verified' : 'Unverified'}
+                  </p>
+                </div>
+                <div className="stat-item">
+                  <h3>Member Since</h3>
+                  <p>{formatDate(user.createdAt)}</p>
+                </div>
+                <div className="stat-item">
+                  <h3>User ID</h3>
+                  <p>#{user.id}</p>
+                </div>
+              </div>
+
+              <div className="profile-actions">
+                <button
+                  onClick={handleRefreshProfile}
+                  disabled={isLoading}
+                  className="secondary-button"
+                >
+                  {isLoading ? (
+                    <div className="loading-spinner">
+                      <div className="spinner"></div>
+                      Refreshing...
+                    </div>
+                  ) : (
+                    'Refresh Profile'
+                  )}
+                </button>
+                <button
+                  onClick={() => navigate('/')}
+                  className="primary-button"
+                >
+                  Back to Events
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="logout-button"
+                >
+                  Sign Out
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
         </main>
         <Footer />
       </div>
