@@ -34,6 +34,9 @@ export const authService = {
       const response = await api.get('/auth/me');
       return response.data;
     } catch (error) {
+      if (error.response?.status === 401) {
+        this.logout();
+      }
       throw new Error(error.response?.data?.message || 'Failed to get user data');
     }
   },
