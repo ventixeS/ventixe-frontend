@@ -1,6 +1,5 @@
 import React from 'react'
 import './Header.css'
-import searchIcon from '../images/search-icon.svg'
 import bellIcon from '../images/bell-icon.svg'
 import settingsIcon from '../images/settings-icon.svg'
 import { useAuth } from '../../contexts/AuthContext'
@@ -19,7 +18,6 @@ const Header = () => {
   return (
     <header className="header">
       <div className="search-bar">
-        <img src={searchIcon} alt="Search" className="search-icon" />
         <input type="text" placeholder="Search event, location, etc." />
       </div>
       

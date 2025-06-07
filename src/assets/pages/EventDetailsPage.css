@@ -68,10 +68,11 @@
 }
 
 .event-details-main {
-  padding: 2rem;
-  max-width: 1200px;
+  padding: 24px;
+  max-width: 1400px;
   margin: 0 auto;
-  background: var(--bg-primary);
+  background: #f8fafc;
+  min-height: 100vh;
 }
 
 .event-details-left {

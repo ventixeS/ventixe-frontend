@@ -97,112 +97,179 @@ const ProfilePage = () => {
       <Nav />
       <div className="content-area">
         <Header />
-        <main>
-          <div className="profile-container">
+        <main className="profile-main">
+          <div className="profile-header">
+            <div className="header-content">
+              <h1>Account Profile</h1>
+              <p>Manage your account settings and preferences</p>
+            </div>
+            <div className="header-actions">
+              <button
+                onClick={handleRefreshProfile}
+                disabled={isLoading}
+                className="refresh-btn"
+              >
+                {isLoading ? 'Refreshing...' : 'Refresh Profile'}
+              </button>
+            </div>
+          </div>
+
+          <div className="profile-grid">
+            {/* Profile Card */}
             <div className="profile-card">
-              <div className="profile-header">
-                <div className="profile-avatar">
-                  <UserCircleIcon className="w-24 h-24 text-gray-400" />
-                </div>
-                <div className="profile-info">
-                  <h1 className="profile-name">{user.name}</h1>
-                  <div className="profile-email">
-                    <EnvelopeIcon className="w-5 h-5" />
-                    <span>{user.email}</span>
-                    {verificationStatus === true && (
-                      <CheckBadgeIcon className="w-5 h-5 text-green-500" title="Email verified" />
-                    )}
-                    {verificationStatus === false && (
-                      <ExclamationTriangleIcon className="w-5 h-5 text-yellow-500" title="Email not verified" />
-                    )}
+              <div className="card-header">
+                <h2>Profile Information</h2>
+              </div>
+              <div className="card-content">
+                <div className="profile-avatar-section">
+                  <div className="avatar-container">
+                    <UserCircleIcon className="avatar-icon" />
                   </div>
-                  <div className="profile-joined">
-                    <CalendarIcon className="w-5 h-5" />
-                    <span>Joined {formatDate(user.createdAt)}</span>
+                  <div className="profile-details">
+                    <h3 className="user-name">{user.name}</h3>
+                    <div className="user-email">
+                      <EnvelopeIcon className="email-icon" />
+                      <span>{user.email}</span>
+                      {verificationStatus === true && (
+                        <CheckBadgeIcon className="verified-icon" title="Email verified" />
+                      )}
+                      {verificationStatus === false && (
+                        <ExclamationTriangleIcon className="unverified-icon" title="Email not verified" />
+                      )}
+                    </div>
+                    <div className="user-joined">
+                      <CalendarIcon className="calendar-icon" />
+                      <span>Member since {formatDate(user.createdAt)}</span>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              {verificationStatus === false && (
-                <div className="verification-warning">
-                  <div className="warning-content">
-                    <ExclamationTriangleIcon className="w-6 h-6 text-yellow-500" />
-                    <div>
-                      <h3>Email Not Verified</h3>
-                      <p>Please verify your email address to access all features.</p>
+            {/* Account Status Card */}
+            <div className="status-card">
+              <div className="card-header">
+                <h2>Account Status</h2>
+              </div>
+              <div className="card-content">
+                <div className="status-items">
+                  <div className="status-item">
+                    <div className="status-label">Verification Status</div>
+                    <div className={`status-value ${verificationStatus ? 'verified' : 'unverified'}`}>
+                      {verificationStatus ? (
+                        <><CheckBadgeIcon className="status-icon verified" /> Verified</>
+                      ) : (
+                        <><ExclamationTriangleIcon className="status-icon unverified" /> Unverified</>
+                      )}
                     </div>
                   </div>
+                  <div className="status-item">
+                    <div className="status-label">User ID</div>
+                    <div className="status-value">#{user.id}</div>
+                  </div>
+                  <div className="status-item">
+                    <div className="status-label">Account Type</div>
+                    <div className="status-value">Standard Member</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Email Verification Card */}
+            {verificationStatus === false && (
+              <div className="verification-card">
+                <div className="card-header warning">
+                  <ExclamationTriangleIcon className="warning-icon" />
+                  <h2>Email Verification Required</h2>
+                </div>
+                <div className="card-content">
+                  <p>Please verify your email address to access all platform features and receive important notifications.</p>
+                  
                   {error && (
-                    <div className="error-message">
-                      <p>{error}</p>
+                    <div className="alert error">
+                      <ExclamationTriangleIcon className="alert-icon" />
+                      <span>{error}</span>
                     </div>
                   )}
+                  
                   {resendMessage && (
-                    <div className="success-message">
-                      <p>{resendMessage}</p>
+                    <div className="alert success">
+                      <CheckBadgeIcon className="alert-icon" />
+                      <span>{resendMessage}</span>
                     </div>
                   )}
+                  
                   <button
                     onClick={handleResendVerification}
                     disabled={isLoading}
-                    className="verify-button"
+                    className="verify-email-btn"
                   >
                     {isLoading ? (
-                      <div className="loading-spinner">
-                        <div className="spinner"></div>
-                        Sending...
-                      </div>
+                      <>
+                        <div className="loading-spinner"></div>
+                        Sending verification email...
+                      </>
                     ) : (
                       'Resend Verification Email'
                     )}
                   </button>
                 </div>
-              )}
+              </div>
+            )}
 
-              <div className="profile-stats">
-                <div className="stat-item">
-                  <h3>Account Status</h3>
-                  <p className={`status ${verificationStatus ? 'verified' : 'unverified'}`}>
-                    {verificationStatus ? 'Verified' : 'Unverified'}
-                  </p>
-                </div>
-                <div className="stat-item">
-                  <h3>Member Since</h3>
-                  <p>{formatDate(user.createdAt)}</p>
-                </div>
-                <div className="stat-item">
-                  <h3>User ID</h3>
-                  <p>#{user.id}</p>
+            {/* Quick Actions Card */}
+            <div className="actions-card">
+              <div className="card-header">
+                <h2>Quick Actions</h2>
+              </div>
+              <div className="card-content">
+                <div className="action-buttons">
+                  <button
+                    onClick={() => navigate('/')}
+                    className="action-btn primary"
+                  >
+                    Browse Events
+                  </button>
+                  <button
+                    onClick={() => navigate('/my-bookings')}
+                    className="action-btn secondary"
+                  >
+                    My Bookings
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="action-btn danger"
+                  >
+                    Sign Out
+                  </button>
                 </div>
               </div>
+            </div>
 
-              <div className="profile-actions">
-                <button
-                  onClick={handleRefreshProfile}
-                  disabled={isLoading}
-                  className="secondary-button"
-                >
-                  {isLoading ? (
-                    <div className="loading-spinner">
-                      <div className="spinner"></div>
-                      Refreshing...
-                    </div>
-                  ) : (
-                    'Refresh Profile'
-                  )}
-                </button>
-                <button
-                  onClick={() => navigate('/')}
-                  className="primary-button"
-                >
-                  Back to Events
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className="logout-button"
-                >
-                  Sign Out
-                </button>
+            {/* Account Statistics Card */}
+            <div className="stats-card">
+              <div className="card-header">
+                <h2>Account Statistics</h2>
+              </div>
+              <div className="card-content">
+                <div className="stats-grid">
+                  <div className="stat-item">
+                    <div className="stat-number">0</div>
+                    <div className="stat-label">Total Bookings</div>
+                  </div>
+                  <div className="stat-item">
+                    <div className="stat-number">0</div>
+                    <div className="stat-label">Events Attended</div>
+                  </div>
+                  <div className="stat-item">
+                    <div className="stat-number">$0</div>
+                    <div className="stat-label">Total Spent</div>
+                  </div>
+                  <div className="stat-item">
+                    <div className="stat-number">{formatDate(user.createdAt).split(',')[1]}</div>
+                    <div className="stat-label">Member Since</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

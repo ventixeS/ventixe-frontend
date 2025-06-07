@@ -9,7 +9,7 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-content">
         <div className="footer-copyright">
-          Copyright © 2025 Peterdraw
+          Copyright © 2025 Stefan Strandberg
         </div>
         
         <nav className="footer-nav">

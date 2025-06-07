@@ -103,7 +103,6 @@ const EventDetailsPage = () => {
       <div className="content-area">
         <Header />
         <main className="event-details-main">
-          {/* Breadcrumb */}
           <div className="breadcrumb">
             <Link to="/dashboard" className="breadcrumb-link">Dashboard</Link>
             <span className="breadcrumb-separator">/</span>
@@ -112,7 +111,6 @@ const EventDetailsPage = () => {
             <span className="breadcrumb-current">Event Details</span>
           </div>
 
-          {/* Back Button and Title */}
           <div className="page-header">
             <button onClick={() => navigate(-1)} className="back-button">
               <svg viewBox="0 0 20 20" fill="currentColor" className="back-icon">
@@ -123,24 +121,19 @@ const EventDetailsPage = () => {
           </div>
 
           <div className="event-details-container">
-            {/* Main Content */}
             <div className="event-details-content">
-              {/* Category and Status */}
               <div className="event-meta">
                 <span className="event-category">Music</span>
                 <span className="event-status active">Active</span>
               </div>
 
-              {/* Venue Layout Visual */}
               <div className="venue-layout">
                 <div className="seating-chart">
-                  {/* Bronze sections */}
                   <div className="seating-section bronze top-left">BRONZE</div>
                   <div className="seating-section bronze top-right">BRONZE</div>
                   <div className="seating-section bronze bottom-left">SILVER</div>
                   <div className="seating-section bronze bottom-right">SILVER</div>
                   
-                  {/* Center sections */}
                   <div className="seating-section diamond center-top">DIAMOND</div>
                   <div className="seating-section vip center-middle">VIP</div>
                   <div className="seating-section general center-bottom">
@@ -150,7 +143,6 @@ const EventDetailsPage = () => {
                 </div>
               </div>
 
-              {/* Event Info */}
               <div className="event-info">
                 <h2 className="event-title">{event.title}</h2>
                 <div className="event-pricing">
@@ -193,7 +185,6 @@ const EventDetailsPage = () => {
               </div>
             </div>
 
-            {/* Packages Sidebar */}
             <div className="packages-sidebar">
               <div className="packages-header">
                 <h3>Packages</h3>
