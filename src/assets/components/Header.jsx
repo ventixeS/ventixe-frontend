@@ -6,9 +6,8 @@ import settingsIcon from '../images/settings-icon.svg'
 import { useAuth } from '../../contexts/AuthContext'
 
 const Header = () => {
-  const { user, isAuthenticated } = useAuth()
+  const { user, isAuthenticated, loading } = useAuth()
   
-  // Get user initials for avatar
   const getUserInitials = (name) => {
     if (!name) return 'U'
     return name
@@ -32,7 +31,17 @@ const Header = () => {
           <img src={settingsIcon} alt="Settings" />
         </button>
         
-        {isAuthenticated && user ? (
+        {loading ? (
+          <div className="user-profile">
+            <div className="user-avatar">
+              <span>...</span>
+            </div>
+            <div className="user-info">
+              <div className="user-name">Loading...</div>
+              <div className="user-role">Please wait</div>
+            </div>
+          </div>
+        ) : isAuthenticated && user ? (
           <div className="user-profile">
             <div className="user-avatar">
               <span>{getUserInitials(user.name)}</span>

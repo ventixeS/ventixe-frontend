@@ -24,10 +24,17 @@ export const AuthProvider = ({ children }) => {
         
         if (token && storedUser) {
           try {
-            const currentUser = await authService.getCurrentUser();
-            setUser(currentUser);
+            setUser(storedUser);
             setIsAuthenticated(true);
-          } catch {
+            
+            try {
+              const currentUser = await authService.getCurrentUser();
+              setUser(currentUser);
+            } catch (refreshError) {
+              console.warn('Failed to refresh user data, using stored user:', refreshError);
+            }
+          } catch (error) {
+            console.error('Auth initialization error:', error);
             authService.logout();
             setUser(null);
             setIsAuthenticated(false);

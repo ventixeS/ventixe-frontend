@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import { bookingService } from '../../services/bookingService'
+import { eventService } from '../../services/eventService'
 import Header from '../components/Header'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
@@ -14,73 +16,65 @@ const MyBookingsPage = () => {
 
   useEffect(() => {
     const fetchBookings = async () => {
-      try {
+      if (!user?.id) {
+        setLoading(false)
+        return
+      }
 
-        const dummyBookings = [
-          {
-            id: 1,
-            eventId: 'evt1',
-            eventTitle: "Summer Music Festival 2024",
-            eventDate: "2024-06-15T18:00:00Z",
-            eventLocation: "Central Park, Stockholm",
-            bookingDate: "2024-05-10T14:30:00Z",
-            status: "confirmed",
-            ticketQuantity: 2,
-            totalAmount: 150,
-            package: "VIP Package",
-            bookingReference: "VTX001234"
-          },
-          {
-            id: 2,
-            eventId: 'evt2',
-            eventTitle: "Food & Wine Expo",
-            eventDate: "2024-05-20T12:00:00Z",
-            eventLocation: "Stockholm Convention Center",
-            bookingDate: "2024-04-25T10:15:00Z",
-            status: "confirmed",
-            ticketQuantity: 1,
-            totalAmount: 45,
-            package: "General Admission",
-            bookingReference: "VTX001235"
-          },
-          {
-            id: 3,
-            eventId: 'evt3',
-            eventTitle: "Tech Conference 2024",
-            eventDate: "2024-07-10T09:00:00Z",
-            eventLocation: "Stockholm Tech Hub",
-            bookingDate: "2024-05-15T16:45:00Z",
-            status: "pending",
-            ticketQuantity: 1,
-            totalAmount: 125,
-            package: "Conference Pass",
-            bookingReference: "VTX001236"
-          },
-          {
-            id: 4,
-            eventId: 'evt4',
-            eventTitle: "Art Gallery Opening",
-            eventDate: "2024-04-10T19:00:00Z",
-            eventLocation: "Modern Art Museum",
-            bookingDate: "2024-03-28T11:20:00Z",
-            status: "attended",
-            ticketQuantity: 2,
-            totalAmount: 60,
-            package: "Opening Night",
-            bookingReference: "VTX001237"
-          }
-        ]
+      try {
+        const userBookings = await bookingService.getUserBookings(user.id)
+        const bookingsData = userBookings.result || userBookings.data || userBookings || []
+        const bookingsArray = Array.isArray(bookingsData) ? bookingsData : []
         
-        setBookings(dummyBookings)
+        const enrichedBookings = await Promise.all(
+          bookingsArray.map(async (booking) => {
+            try {
+              const eventResponse = await eventService.getEventById(booking.eventId)
+              const event = eventResponse.result || eventResponse.data || eventResponse
+              
+              return {
+                id: booking.id,
+                eventId: booking.eventId,
+                eventTitle: event?.title || 'Unknown Event',
+                eventDate: event?.date || booking.bookingDate,
+                eventLocation: event?.location || 'Location TBD',
+                bookingDate: booking.bookingDate,
+                status: booking.status || 'confirmed',
+                ticketQuantity: booking.ticketQuantity || 1,
+                totalAmount: booking.totalAmount || 0,
+                package: booking.package || 'General Admission',
+                bookingReference: booking.id || 'N/A'
+              }
+            } catch (eventError) {
+              console.warn('Failed to fetch event details for booking:', booking.id, eventError)
+              return {
+                id: booking.id,
+                eventId: booking.eventId,
+                eventTitle: 'Event Details Unavailable',
+                eventDate: booking.bookingDate,
+                eventLocation: 'Location TBD',
+                bookingDate: booking.bookingDate,
+                status: booking.status || 'confirmed',
+                ticketQuantity: booking.ticketQuantity || 1,
+                totalAmount: booking.totalAmount || 0,
+                package: booking.package || 'General Admission',
+                bookingReference: booking.id || 'N/A'
+              }
+            }
+          })
+        )
+        
+        setBookings(enrichedBookings)
       } catch (error) {
         console.error('Error fetching bookings:', error)
+        setBookings([]) 
       } finally {
         setLoading(false)
       }
     }
 
     fetchBookings()
-  }, [])
+  }, [user])
 
   const filteredBookings = bookings.filter(booking => {
     const eventDate = new Date(booking.eventDate)
@@ -121,6 +115,7 @@ const MyBookingsPage = () => {
   const handleCancelBooking = async (bookingId) => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
       try {
+        await bookingService.cancelBooking(bookingId)
         setBookings(prev => prev.map(booking => 
           booking.id === bookingId 
             ? { ...booking, status: 'cancelled' }
