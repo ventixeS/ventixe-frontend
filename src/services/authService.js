@@ -13,12 +13,14 @@ export const authService = {
   async login(credentials) {
     try {
       const response = await api.post('/auth/login', credentials);
-      const { user, token } = response.data;
+      const userData = response.data;
       
-      if (!user || !token) {
+      if (!userData || !userData.token) {
         throw new Error('Invalid login response from server');
       }
 
+      const { token, ...user } = userData;
+      
       localStorage.setItem('authToken', token);
       localStorage.setItem('user', JSON.stringify(user));
       
