@@ -7,7 +7,7 @@ export const bookingService = {
       return response.data;
     } catch (error) {
       if (error.response) {
-        console.error('Booking API Error:', error.response.status, error.response.data);
+        console.error('Booking API Error:', error.response.status, JSON.stringify(error.response.data));
       } else {
         console.error('Booking API Unknown Error:', error.message);
       }

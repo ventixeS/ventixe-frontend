@@ -73,7 +73,7 @@ const BookingEventPage = () => {
         try {
             const bookingData = {
                 ...formData,
-                userId: user?.id || null,
+                userId: user ? String(user.id) : null,
                 bookingDate: new Date().toISOString(),
                 status: 'confirmed',
                 totalAmount: packagePrice,
