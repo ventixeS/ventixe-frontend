@@ -6,6 +6,11 @@ export const bookingService = {
       const response = await bookingApi.post('/bookings', bookingData);
       return response.data;
     } catch (error) {
+      if (error.response) {
+        console.error('Booking API Error:', error.response.status, error.response.data);
+      } else {
+        console.error('Booking API Unknown Error:', error.message);
+      }
       throw new Error(error.response?.data?.message || 'Failed to create booking');
     }
   },
