@@ -4,7 +4,7 @@ import axios from 'axios';
 const SERVICE_URLS = {
   user: 'https://ventixeuserservice-c3dxc0hvbgb3fdbp.swedencentral-01.azurewebsites.net/api',
   event: 'https://ventixeeventservices-cah0ebd7hagub9bu.swedencentral-01.azurewebsites.net/api',
-  booking: 'https://ventixe-booking-service-eeg8bbcmdfd4b0fy.swedencentral-01.azurewebsites.net/api'
+  booking: 'https://ventixebookingservices-edd8fvenghbrghgf.swedencentral-01.azurewebsites.net/api'
 };
 
 const createApiInstance = (baseURL) => {
