@@ -68,9 +68,10 @@
 }
 
 .event-details-main {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 32px;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: var(--bg-primary);
 }
 
 .event-details-left {
@@ -408,5 +409,40 @@
   
   .partners-list img {
     height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .event-details-main {
+    padding: 0.75rem;
+  }
+  
+  .page-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .event-details-container {
+    gap: 1rem;
+  }
+  
+  .seating-chart {
+    height: 180px;
+    gap: 0.25rem;
+  }
+  
+  .seating-section {
+    font-size: 0.75rem;
+  }
+  
+  .partners-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .package-item {
+    padding: 0.75rem 1rem;
+  }
+  
+  .packages-header {
+    padding: 1rem;
   }
 } 

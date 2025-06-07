@@ -25,17 +25,17 @@ const EventList = () => {
       setError(null);
       
       const data = await eventService.getAllEvents();
-      console.log("API response:", data);
-      
-      if (data && data.result && Array.isArray(data.result)) {
-        setEvents(data.result);
-        console.log("Events set to:", data.result);
-      } else if (Array.isArray(data)) {
-        setEvents(data);
-        console.log("Events set to array directly:", data);
-      } else {
-        console.error("Unexpected response format:", data);
-        setError("Unexpected API response format");
+        console.log("API response:", data);
+        
+        if (data && data.result && Array.isArray(data.result)) {
+          setEvents(data.result);
+          console.log("Events set to:", data.result);
+        } else if (Array.isArray(data)) {
+          setEvents(data);
+          console.log("Events set to array directly:", data);
+        } else {
+          console.error("Unexpected response format:", data);
+          setError("Unexpected API response format");
         setEvents([]);
       }
     } catch (err) {
