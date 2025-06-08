@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/useAuth';
 import './LoginPage.css';
 
 const LoginPage = () => {
@@ -108,14 +108,7 @@ const LoginPage = () => {
             disabled={isLoading}
             className="submit-button"
           >
-            {isLoading ? (
-              <div className="loading-spinner">
-                <div className="spinner"></div>
-                Signing In...
-              </div>
-            ) : (
-              'Sign In'
-            )}
+            {isLoading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
 

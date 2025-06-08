@@ -4,7 +4,7 @@ import './BookingEventPage.css';
 import Header from '../components/Header';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/useAuth';
 import { eventService } from '../../services/eventService';
 import { bookingService } from '../../services/bookingService';
 

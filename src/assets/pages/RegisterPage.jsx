@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { EyeIcon, EyeSlashIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/useAuth';
 import './RegisterPage.css';
 
 const RegisterPage = () => {
@@ -209,14 +209,7 @@ const RegisterPage = () => {
             disabled={isLoading}
             className="submit-button"
           >
-            {isLoading ? (
-              <div className="loading-spinner">
-                <div className="spinner"></div>
-                Creating Account...
-              </div>
-            ) : (
-              'Create Account'
-            )}
+            {isLoading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
 

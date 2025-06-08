@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../../contexts/AuthContext'
+import { useAuth } from '../../contexts/useAuth'
 import { bookingService } from '../../services/bookingService'
 import { eventService } from '../../services/eventService'
 import Header from '../components/Header'
@@ -91,25 +91,6 @@ const MyBookingsPage = () => {
         return true
     }
   })
-
-
-
-  const handleCancelBooking = async (bookingId) => {
-    if (window.confirm('Are you sure you want to cancel this booking?')) {
-      try {
-        await bookingService.cancelBooking(bookingId)
-        setBookings(prev => prev.map(booking => 
-          booking.id === bookingId 
-            ? { ...booking, status: 'cancelled' }
-            : booking
-        ))
-        alert('Booking cancelled successfully')
-      } catch (error) {
-        console.error('Error cancelling booking:', error)
-        alert('Failed to cancel booking')
-      }
-    }
-  }
 
   if (loading) {
     return (
@@ -203,85 +184,43 @@ const MyBookingsPage = () => {
               <table className="bookings-table">
                 <thead>
                   <tr>
-                    <th>Event Details</th>
+                    <th>Invoice ID</th>
                     <th>Date & Time</th>
-                    <th>Package</th>
-                    <th>Tickets</th>
+                    <th>Name</th>
+                    <th>Event</th>
+                    <th>Ticket Category</th>
+                    <th>Price</th>
+                    <th>Qty</th>
                     <th>Amount</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th>E-Voucher</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredBookings.map(booking => (
                     <tr key={booking.id} className="booking-row">
-                      <td className="event-details">
-                        <div className="event-info">
-                          <h4 className="event-title">{booking.eventTitle}</h4>
-                          <p className="event-location">{booking.eventLocation}</p>
-                          <span className="booking-ref">#{booking.bookingReference}</span>
-                        </div>
-                      </td>
+                      <td className="invoice-id">{booking.id}</td>
                       <td className="event-datetime">
                         <div className="datetime-info">
-                          <span className="date">{new Date(booking.eventDate).toLocaleDateString('en-US', { 
-                            month: 'short', 
-                            day: 'numeric', 
-                            year: 'numeric' 
-                          })}</span>
-                          <span className="time">{new Date(booking.eventDate).toLocaleTimeString('en-US', { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
-                          })}</span>
+                          <span className="date">{new Date(booking.eventDate).toLocaleDateString('en-US', { month: 'numeric', day: '2-digit', year: 'numeric' })}</span>
+                          <span className="time">{new Date(booking.eventDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
                       </td>
-                      <td className="package-info">
-                        <span className="package-name">{booking.package}</span>
+                      <td className="attendee-name">{booking.attendeeName || '—'}</td>
+                      <td className="event-info">
+                        <div className="event-title">{booking.eventTitle}</div>
+                        <div className="event-location">{booking.eventLocation}</div>
                       </td>
-                      <td className="ticket-quantity">
-                        <span className="quantity">{booking.ticketQuantity}</span>
-                        <span className="unit">tickets</span>
+                      <td className="ticket-category">
+                        <span className={`ticket-badge ticket-${(booking.package || '').toLowerCase().replace(/\s/g, '-')}`}>{booking.package}</span>
                       </td>
-                      <td className="amount">
-                        <span className="price">${booking.totalAmount}</span>
-                      </td>
+                      <td className="price">${booking.price || booking.totalAmount / (booking.ticketQuantity || 1)}</td>
+                      <td className="qty">{booking.ticketQuantity}</td>
+                      <td className="amount">${booking.totalAmount}</td>
                       <td className="status">
-                        <span 
-                          className={`status-badge status-${booking.status.toLowerCase()}`}
-                        >
-                          {booking.status}
-                        </span>
+                        <span className={`status-badge status-${booking.status.toLowerCase()}`}>{booking.status}</span>
                       </td>
-                      <td className="actions">
-                        <div className="action-buttons">
-                          <Link 
-                            to={`/events/${booking.eventId}`}
-                            className="action-btn primary"
-                            title="View Event"
-                          >
-                            View
-                          </Link>
-                          
-                          {booking.status === 'confirmed' && (
-                            <button 
-                              className="action-btn secondary"
-                              title="Download Ticket"
-                            >
-                              Download
-                            </button>
-                          )}
-                          
-                          {booking.status === 'confirmed' && new Date(booking.eventDate) > new Date() && (
-                            <button 
-                              onClick={() => handleCancelBooking(booking.id)}
-                              className="action-btn danger"
-                              title="Cancel Booking"
-                            >
-                              Cancel
-                            </button>
-                          )}
-                        </div>
-                      </td>
+                      <td className="e-voucher">{booking.eVoucher || booking.bookingReference || '—'}</td>
                     </tr>
                   ))}
                 </tbody>

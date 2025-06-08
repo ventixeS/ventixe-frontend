@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
-import { useAuth } from '../../contexts/AuthContext'
+import { useAuth } from '../../contexts/useAuth'
 import './Nav.css'
 import ventixeLogo from '../images/ventixe-logo.svg'
 import dashboardIcon from '../images/dashboard-icon.svg'

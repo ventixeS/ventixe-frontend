@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../../contexts/AuthContext'
+import { useAuth } from '../../contexts/useAuth'
 import { bookingService } from '../../services/bookingService'
 import { eventService } from '../../services/eventService'
 import Header from '../components/Header'

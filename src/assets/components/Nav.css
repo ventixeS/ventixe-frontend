@@ -47,6 +47,7 @@
 .user-details {
   flex: 1;
   min-width: 0;
+  text-align: center;
 }
 
 .user-name {
@@ -59,7 +60,7 @@
 }
 
 .user-email {
-  font-size: var(--text-xs);
+  font-size: 0.7rem;
   color: var(--grey-80);
   white-space: nowrap;
   overflow: hidden;

@@ -2,7 +2,7 @@ import React from 'react'
 import './Header.css'
 import bellIcon from '../images/bell-icon.svg'
 import settingsIcon from '../images/settings-icon.svg'
-import { useAuth } from '../../contexts/AuthContext'
+import { useAuth } from '../../contexts/useAuth'
 
 const Header = () => {
   const { user, isAuthenticated, loading } = useAuth()
