@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import { bookingService } from '../../services/bookingService'
+import { eventService } from '../../services/eventService'
 import Header from '../components/Header'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
@@ -8,60 +10,97 @@ import './DashboardPage.css'
 
 const DashboardPage = () => {
   const { user } = useAuth()
-  const [stats, setStats] = useState({
-    totalBookings: 0,
-    upcomingEvents: 0,
-    totalSpent: 0
-  })
   const [recentBookings, setRecentBookings] = useState([])
   const [upcomingEvents, setUpcomingEvents] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!user) return
+
     const fetchDashboardData = async () => {
+      setLoading(true)
       try {
-        // This would normally fetch user's booking data from your BookingService
-        // For MVP, we'll simulate with dummy data
-        setStats({
-          totalBookings: 12,
-          upcomingEvents: 3,
-          totalSpent: 450
-        })
+        const bookingsResponse = await bookingService.getUserBookings()
+        let bookingsArray = []
+        
+        if (bookingsResponse?.result) {
+          bookingsArray = Array.isArray(bookingsResponse.result) ? bookingsResponse.result : []
+        } else if (bookingsResponse?.data) {
+          bookingsArray = Array.isArray(bookingsResponse.data) ? bookingsResponse.data : []
+        } else if (Array.isArray(bookingsResponse)) {
+          bookingsArray = bookingsResponse
+        }
 
-        setRecentBookings([
-          {
-            id: 1,
-            eventTitle: "Summer Music Festival",
-            date: "2024-06-15",
-            status: "confirmed",
-            amount: 75
-          },
-          {
-            id: 2,
-            eventTitle: "Food & Wine Expo",
-            date: "2024-05-20",
-            status: "confirmed",
-            amount: 45
-          }
-        ])
+        const eventsResponse = await eventService.getAllEvents()
+        let eventsArray = []
+        
+        if (eventsResponse?.result) {
+          eventsArray = Array.isArray(eventsResponse.result) ? eventsResponse.result : []
+        } else if (eventsResponse?.data) {
+          eventsArray = Array.isArray(eventsResponse.data) ? eventsResponse.data : []
+        } else if (Array.isArray(eventsResponse)) {
+          eventsArray = eventsResponse
+        }
 
-        setUpcomingEvents([
-          {
-            id: 3,
-            title: "Tech Conference 2024",
-            date: "2024-07-10",
-            location: "Stockholm Convention Center"
-          }
-        ])
+        const enrichedBookings = await Promise.all(
+          bookingsArray
+            .sort((a, b) => new Date(b.bookingDate) - new Date(a.bookingDate))
+            .slice(0, 3) 
+            .map(async (booking) => {
+              try {
+                const eventResponse = await eventService.getEventById(booking.eventId)
+                const event = eventResponse.result || eventResponse.data || eventResponse
+                
+                return {
+                  id: booking.id,
+                  eventTitle: event?.title || 'Unknown Event',
+                  date: event?.date || event?.eventDate || booking.bookingDate,
+                  status: booking.status || 'confirmed',
+                  amount: booking.totalAmount || 0
+                }
+              } catch (eventError) {
+                console.warn('Failed to fetch event details for booking:', booking.id, eventError)
+                return {
+                  id: booking.id,
+                  eventTitle: 'Event Details Unavailable',
+                  date: booking.bookingDate,
+                  status: booking.status || 'confirmed',
+                  amount: booking.totalAmount || 0
+                }
+              }
+            })
+        )
+
+        setRecentBookings(enrichedBookings)
+
+        const now = new Date()
+        const upcomingEventsData = eventsArray
+          .filter(event => {
+            const eventDate = new Date(event.date || event.eventDate)
+            return eventDate > now
+          })
+          .sort((a, b) => new Date(a.date || a.eventDate) - new Date(b.date || b.eventDate))
+          .slice(0, 3) 
+          .map(event => ({
+            id: event.id,
+            title: event.title,
+            date: event.date || event.eventDate,
+            location: event.location || 'Location TBD'
+          }))
+
+        setUpcomingEvents(upcomingEventsData)
+
       } catch (error) {
-        console.error('Error fetching dashboard data:', error)
+        console.error('Error fetching dashboard data:', error)    
+        setRecentBookings([])
+        setUpcomingEvents([])
       } finally {
         setLoading(false)
       }
     }
 
     fetchDashboardData()
-  }, [])
+  }, [user])
 
   if (loading) {
     return (
@@ -89,32 +128,6 @@ const DashboardPage = () => {
             <p>Here's what's happening with your events</p>
           </div>
 
-          {/* Stats Cards */}
-          <div className="stats-grid">
-            <div className="stat-card">
-              <div className="stat-icon">🎫</div>
-              <div className="stat-content">
-                <h3>{stats.totalBookings}</h3>
-                <p>Total Bookings</p>
-              </div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-icon">📅</div>
-              <div className="stat-content">
-                <h3>{stats.upcomingEvents}</h3>
-                <p>Upcoming Events</p>
-              </div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-icon">💰</div>
-              <div className="stat-content">
-                <h3>${stats.totalSpent}</h3>
-                <p>Total Spent</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Actions */}
           <div className="quick-actions">
             <h2>Quick Actions</h2>
             <div className="action-buttons">
@@ -133,7 +146,6 @@ const DashboardPage = () => {
             </div>
           </div>
 
-          {/* Recent Activity */}
           <div className="dashboard-sections">
             <div className="section">
               <h2>Recent Bookings</h2>

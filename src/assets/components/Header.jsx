@@ -1,14 +1,23 @@
 import React from 'react'
 import './Header.css'
-import searchIcon from '../images/search-icon.svg'
 import bellIcon from '../images/bell-icon.svg'
 import settingsIcon from '../images/settings-icon.svg'
+import { useAuth } from '../../contexts/AuthContext'
 
 const Header = () => {
+  const { user, isAuthenticated, loading } = useAuth()
+  
+  const getUserInitials = (name) => {
+    if (!name) return 'U'
+    return name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase())
+      .slice(0, 2)
+      .join('')
+  }
   return (
     <header className="header">
       <div className="search-bar">
-        <img src={searchIcon} alt="Search" className="search-icon" />
         <input type="text" placeholder="Search event, location, etc." />
       </div>
       
@@ -20,15 +29,37 @@ const Header = () => {
           <img src={settingsIcon} alt="Settings" />
         </button>
         
-        <div className="user-profile">
-          <div className="user-avatar">
-            <span>SS</span>
+        {loading ? (
+          <div className="user-profile">
+            <div className="user-avatar">
+              <span>...</span>
+            </div>
+            <div className="user-info">
+              <div className="user-name">Loading...</div>
+              <div className="user-role">Please wait</div>
+            </div>
           </div>
-          <div className="user-info">
-            <div className="user-name">Stefan Strandberg</div>
-            <div className="user-role">Admin</div>
+        ) : isAuthenticated && user ? (
+          <div className="user-profile">
+            <div className="user-avatar">
+              <span>{getUserInitials(user.name)}</span>
+            </div>
+            <div className="user-info">
+              <div className="user-name">{user.name || 'User'}</div>
+              <div className="user-role">Member</div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="user-profile">
+            <div className="user-avatar">
+              <span>G</span>
+            </div>
+            <div className="user-info">
+              <div className="user-name">Guest</div>
+              <div className="user-role">Visitor</div>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   )

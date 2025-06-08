@@ -1,22 +1,13 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import { authService } from '../services/authService';
 
 const AuthContext = createContext({});
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Initialize auth state on app load
   useEffect(() => {
     const initializeAuth = async () => {
       try {
@@ -24,20 +15,18 @@ export const AuthProvider = ({ children }) => {
         const token = authService.getStoredToken();
         
         if (token && storedUser) {
-          // Verify token is still valid by fetching current user
+          setUser(storedUser);
+          setIsAuthenticated(true);
+          
           try {
             const currentUser = await authService.getCurrentUser();
             setUser(currentUser);
-            setIsAuthenticated(true);
-          } catch {
-            // Token is invalid, clear stored data
-            authService.logout();
-            setUser(null);
-            setIsAuthenticated(false);
+          } catch (refreshError) {
+            console.warn('Auth: Failed to refresh user data, continuing with stored user.', refreshError);
           }
         }
       } catch (initError) {
-        console.error('Auth initialization error:', initError);
+        console.error('Auth: Critical error during auth initialization.', initError);
         authService.logout();
         setUser(null);
         setIsAuthenticated(false);
@@ -50,10 +39,10 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (credentials) => {
-    const response = await authService.login(credentials);
-    setUser(response.user);
+    const loggedInUser = await authService.login(credentials);
+    setUser(loggedInUser);
     setIsAuthenticated(true);
-    return response;
+    return loggedInUser;
   };
 
   const register = async (userData) => {
@@ -99,4 +88,6 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-}; 
+};
+
+export { AuthContext }; 

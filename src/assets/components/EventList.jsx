@@ -4,8 +4,7 @@ import EventItem from './EventItem';
 import searchIcon from '../images/search-icon.svg';
 import chevronDownIcon from '../images/chevron-down-icon.svg';
 import calendarIcon from '../images/calendar-icon.svg';
-
-const API_URL = "https://ventixeeventservices-cah0ebd7hagub9bu.swedencentral-01.azurewebsites.net";
+import { eventService } from '../../services/eventService';
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
@@ -25,11 +24,7 @@ const EventList = () => {
       setLoading(true);
       setError(null);
       
-      console.log(`Fetching events from: ${API_URL}/api/events`);
-      const res = await fetch(`${API_URL}/api/events`);
-      
-      if (res.ok) {
-        const data = await res.json();
+      const data = await eventService.getAllEvents();
         console.log("API response:", data);
         
         if (data && data.result && Array.isArray(data.result)) {
@@ -41,11 +36,6 @@ const EventList = () => {
         } else {
           console.error("Unexpected response format:", data);
           setError("Unexpected API response format");
-          setEvents([]);
-        }
-      } else {
-        console.error(`API Error: ${res.status} ${res.statusText}`);
-        setError(`Error fetching events: ${res.status} ${res.statusText}`);
         setEvents([]);
       }
     } catch (err) {
@@ -61,7 +51,6 @@ const EventList = () => {
     getEvents();
   }, []);
 
-  // Format API events for display
   const formatEvents = (apiEvents) => {
     return apiEvents.map(event => ({
       id: event.id,
@@ -78,7 +67,6 @@ const EventList = () => {
     }));
   };
 
-  // Helper functions for formatting event data
   const getCategoryName = (id) => {
     const categories = ['Music', 'Food & Culinary', 'Outdoor & Adventure', 'Art & Design', 'Fashion', 'Technology'];
     return categories[id % categories.length];
@@ -126,7 +114,7 @@ const EventList = () => {
       <section className="events-container error-container">
         <div className="error">{error}</div>
         <div className="error-details">
-          <p>The API endpoint at <code>{API_URL}/api/events</code> is not responding correctly.</p>
+          <p>The events service is not responding correctly.</p>
           <p>Please verify that:</p>
           <ul>
             <li>Your backend service is properly deployed</li>

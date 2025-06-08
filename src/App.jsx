@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
-import ProtectedRoute from './components/ProtectedRoute'
+import ProtectedRoute from './assets/components/ProtectedRoute'
 import './App.css'
 
 // Pages
@@ -18,16 +18,13 @@ function App() {
   return (
     <AuthProvider>
       <Routes>
-        {/* Public Routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/verify-email" element={<EmailVerificationPage />} />
         
-        {/* Public Event Routes */}
         <Route path="/" element={<EventPage />} />
         <Route path="/events/:id" element={<EventDetailsPage />} />
         
-        {/* Protected Routes */}
         <Route path="/events/booking/:id" element={
           <ProtectedRoute>
             <BookingEventPage />
@@ -39,7 +36,6 @@ function App() {
           </ProtectedRoute>
         } />
         
-        {/* Essential MVP Routes */}
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <DashboardPage />
@@ -51,7 +47,6 @@ function App() {
           </ProtectedRoute>
         } />
         
-        {/* Future Routes */}
         <Route path="/invoices" element={
           <ProtectedRoute>
             <div>Invoices - Coming Soon</div>

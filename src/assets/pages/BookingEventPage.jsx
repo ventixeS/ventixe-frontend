@@ -4,19 +4,21 @@ import './BookingEventPage.css';
 import Header from '../components/Header';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
+import { useAuth } from '../../contexts/AuthContext';
+import { eventService } from '../../services/eventService';
+import { bookingService } from '../../services/bookingService';
 
 const BookingEventPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const [searchParams] = useSearchParams();
+    const { user, isAuthenticated } = useAuth();
     const [event, setEvent] = useState(null);
-    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
     
-    // Get package info from URL params
     const selectedPackage = searchParams.get('package') || 'General Admission Package';
     const packagePrice = parseFloat(searchParams.get('price')) || 50;
     
@@ -38,36 +40,20 @@ const BookingEventPage = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                // Fetch event details
-                const eventRes = await fetch(`https://ventixeeventservices-cah0ebd7hagub9bu.swedencentral-01.azurewebsites.net/api/events/${id}`);
-                if (!eventRes.ok) throw new Error("Failed to fetch event");
-                const eventData = await eventRes.json();
-                setEvent(eventData.result);
+                const eventData = await eventService.getEventById(id);
+                setEvent(eventData.result || eventData);
 
-                // Fetch user details (assuming user service exists)
-                try {
-                    const userRes = await fetch('https://ventixe-user-service.azurewebsites.net/api/user/current', {
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}` // Adjust based on your auth
-                        }
-                    });
-                    if (userRes.ok) {
-                        const userData = await userRes.json();
-                        setUser(userData);
-                        // Pre-fill form with user data
-                        setFormData(prev => ({
-                            ...prev,
-                            firstName: userData.firstName || '',
-                            lastName: userData.lastName || '',
-                            email: userData.email || '',
-                            phone: userData.phone || '',
-                            streetName: userData.address?.street || '',
-                            postalCode: userData.address?.postalCode || '',
-                            city: userData.address?.city || ''
-                        }));
-                    }
-                } catch {
-                    console.log("User service not available or user not logged in");
+                if (user) {
+                    setFormData(prev => ({
+                        ...prev,
+                        firstName: user.name?.split(' ')[0] || '',
+                        lastName: user.name?.split(' ').slice(1).join(' ') || '',
+                        email: user.email || '',
+                        phone: user.phone || '',
+                        streetName: user.address?.street || '',
+                        postalCode: user.address?.postalCode || '',
+                        city: user.address?.city || ''
+                    }));
                 }
             } catch (err) {
                 setError("Failed to load event details");
@@ -78,7 +64,7 @@ const BookingEventPage = () => {
         };
         
         fetchData();
-    }, [id]);
+    }, [id, user]);
 
     const postBooking = async () => {
         setSubmitting(true);
@@ -87,31 +73,17 @@ const BookingEventPage = () => {
         try {
             const bookingData = {
                 ...formData,
-                userId: user?.id || null,
+                userId: user ? String(user.id) : null,
                 bookingDate: new Date().toISOString(),
                 status: 'confirmed',
-                totalAmount: packagePrice
+                totalAmount: packagePrice,
+                ticketQuantity: 1,
             };
 
-            const res = await fetch('https://ventixebookingservices-edd8fvenghbrghgf.swedencentral-01.azurewebsites.net/api/bookings', {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Adjust based on your auth
-                },
-                body: JSON.stringify(bookingData)
-            });
-            
-            if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.message || "Booking failed");
-            }
-            
-            const result = await res.json();
+            const result = await bookingService.createBooking(bookingData);
             console.log("Booking successful:", result);
             setSuccess(true);
             
-            // Redirect after success
             setTimeout(() => {
                 navigate(`/events/${id}`, { 
                     state: { message: 'Booking confirmed successfully!' }
@@ -134,7 +106,12 @@ const BookingEventPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Basic validation
+        if (!isAuthenticated) {
+            setError('Please log in to make a booking');
+            navigate('/login');
+            return;
+        }
+        
         const requiredFields = ['firstName', 'lastName', 'email', 'streetName', 'postalCode', 'city'];
         const missingFields = requiredFields.filter(field => !formData[field].trim());
         

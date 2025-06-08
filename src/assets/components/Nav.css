@@ -12,7 +12,7 @@
 .brand {
   display: flex;
   align-items: center;
-  padding: 0 var(--space-xl) var(--space-lg);
+  padding: 0 var(--space-xl) var(--space-md);
   margin-bottom: var(--space-xl);
 }
 
@@ -28,11 +28,10 @@
   color: var(--grey-100);
 }
 
-/* User Info Section */
 .user-info {
   display: flex;
   align-items: center;
-  padding: var(--space-md) var(--space-xl);
+  padding: var(--space-md) var(--space-lg);
   margin-bottom: var(--space-lg);
   background-color: rgba(99, 102, 241, 0.1);
   border-radius: var(--radius-md);
@@ -85,6 +84,8 @@
   color: var(--grey-80);
   text-decoration: none;
   transition: background-color var(--transition-fast), color var(--transition-fast);
+  border-radius: var(--radius-md);
+  margin: 0 var(--space-md);
 }
 
 .nav-link:hover {
@@ -102,7 +103,7 @@
 .nav-icon {
   width: 18px;
   height: 18px;
-  margin-right: var(--space-md);
+  margin-right: var(--space-sm);
   opacity: 0.7;
 }
 
@@ -117,9 +118,9 @@
 }
 
 .app-info {
-  background-color: white;
+  background-color: var(--bg-primary);
   border-radius: var(--radius-lg);
-  padding: var(--space-md);
+  padding: var(--space-lg);
   margin: 0 var(--space-md) var(--space-lg);
   text-align: center;
   box-shadow: var(--shadow-sm);
@@ -140,13 +141,13 @@
   font-size: var(--text-xs);
   color: var(--text-secondary);
   margin-bottom: var(--space-md);
-  line-height: 1.4;
+  line-height: var(--line-height-normal);
 }
 
 .app-info .btn {
   padding: var(--space-xs) var(--space-md);
   background-color: var(--primary-100);
-  color: white;
+  color: var(--text-inverse);
   border: none;
   border-radius: var(--radius-full);
   font-size: var(--text-xs);
@@ -162,7 +163,7 @@
 .sign-out-link {
   display: flex;
   align-items: center;
-  padding: var(--space-md) var(--space-xl);
+  padding: var(--space-sm) var(--space-xl);
   color: var(--text-secondary);
   text-decoration: none;
   font-size: var(--text-sm);

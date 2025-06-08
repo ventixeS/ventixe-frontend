@@ -1,7 +1,6 @@
 import api from './api';
 
 export const authService = {
-  // Register a new user
   async register(userData) {
     try {
       const response = await api.post('/auth/register', userData);
@@ -11,39 +10,45 @@ export const authService = {
     }
   },
 
-  // Login user
   async login(credentials) {
     try {
       const response = await api.post('/auth/login', credentials);
-      const { user, token } = response.data;
+      const userData = response.data;
       
-      // Store token and user data
+      if (!userData || !userData.token) {
+        throw new Error('Invalid login response from server');
+      }
+
+      const { token, ...user } = userData;
+      
       localStorage.setItem('authToken', token);
       localStorage.setItem('user', JSON.stringify(user));
       
-      return response.data;
+      return user;
     } catch (error) {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
       throw new Error(error.response?.data?.message || 'Login failed');
     }
   },
 
-  // Logout user
   logout() {
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
   },
 
-  // Get current user from backend
   async getCurrentUser() {
     try {
       const response = await api.get('/auth/me');
       return response.data;
     } catch (error) {
+      if (error.response?.status === 401) {
+        this.logout();
+      }
       throw new Error(error.response?.data?.message || 'Failed to get user data');
     }
   },
 
-  // Verify email
   async verifyEmail(token) {
     try {
       const response = await api.post('/auth/verify-email', { token });
@@ -53,7 +58,6 @@ export const authService = {
     }
   },
 
-  // Check email verification status
   async checkVerificationStatus(email) {
     try {
       const response = await api.get(`/emailverification/status/${encodeURIComponent(email)}`);
@@ -63,7 +67,6 @@ export const authService = {
     }
   },
 
-  // Resend verification email
   async resendVerificationEmail(email) {
     try {
       const response = await api.post('/emailverification/resend', { email });
@@ -73,18 +76,24 @@ export const authService = {
     }
   },
 
-  // Get stored user data
   getStoredUser() {
     const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
+    if (!user || user === 'undefined' || user === 'null') {
+      return null;
+    }
+    try {
+      return JSON.parse(user);
+    } catch (error) {
+      console.error('Error parsing stored user:', error);
+      localStorage.removeItem('user'); // Clean up invalid data
+      return null;
+    }
   },
 
-  // Get stored token
   getStoredToken() {
     return localStorage.getItem('authToken');
   },
 
-  // Check if user is authenticated
   isAuthenticated() {
     return !!this.getStoredToken();
   }
